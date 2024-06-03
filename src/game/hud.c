@@ -194,6 +194,8 @@ void render_dl_power_meter(s16 numHealthWedges) {
     gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
 }
 
+// #### BASE GAME POWER METER LOGIC ####
+#ifndef HUD_STATIC_POWER_METER
 /**
  * Power meter animation called when there's less than 8 health segments
  * Checks its timer to later change into deemphasizing mode.
@@ -277,6 +279,7 @@ void handle_power_meter_actions(s16 numHealthWedges) {
     }
 #endif
 }
+#endif      // Ends ifndef static power meter statement
 
 /**
  * Renders the power meter that shows when Mario is in underwater
@@ -285,6 +288,8 @@ void handle_power_meter_actions(s16 numHealthWedges) {
  */
 void render_hud_power_meter(void) {
     s16 shownHealthWedges = gHudDisplay.wedges;
+
+#ifndef HUD_STATIC_POWER_METER
     if (sPowerMeterHUD.animation != POWER_METER_HIDING) handle_power_meter_actions(shownHealthWedges);
     if (sPowerMeterHUD.animation == POWER_METER_HIDDEN) return;
     switch (sPowerMeterHUD.animation) {
@@ -293,9 +298,19 @@ void render_hud_power_meter(void) {
         case POWER_METER_HIDING:        animate_power_meter_hiding();        break;
         default:                                                             break;
     }
+#endif
+
+#ifdef HUD_STATIC_POWER_METER
+    sPowerMeterHUD.x = HUD_POWER_METER_STATIC_X;
+    sPowerMeterHUD.y = HUD_POWER_METER_STATIC_Y; 
+#endif
+
     render_dl_power_meter(shownHealthWedges);
+#ifndef HUD_STATIC_POWER_METER    
     sPowerMeterVisibleTimer++;
+#endif
 }
+
 
 #ifdef BREATH_METER
 /**
@@ -485,6 +500,11 @@ void render_hud_timer(void) {
     gSPDisplayList(gDisplayListHead++, dl_hud_img_end);
 }
 
+#ifdef HUD_WATERMARK
+void render_hud_watermark() {
+    print_small_text(HUD_WATERMARK_X, HUD_WATERMARK_Y, WATERMARK_STRING, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);
+}
+#endif
 /**
  * Sets HUD status camera value depending of the actions
  * defined in update_camera_status.
@@ -541,7 +561,9 @@ void render_hud(void) {
     s16 hudDisplayFlags = gHudDisplay.flags;
 
     if (hudDisplayFlags == HUD_DISPLAY_NONE) {
+#ifndef HUD_STATIC_POWER_METER
         sPowerMeterHUD.animation = POWER_METER_HIDDEN;
+#endif
         sPowerMeterStoredHealth = 8;
         sPowerMeterVisibleTimer = 0;
 #ifdef BREATH_METER
@@ -588,6 +610,12 @@ void render_hud(void) {
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_KEYS) {
             render_hud_keys();
         }
+
+#ifdef HUD_WATERMARK
+        if (hudDisplayFlags) {
+                    render_hud_watermark();
+                }
+#endif
 
 #ifdef BREATH_METER
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_BREATH_METER) render_hud_breath_meter();

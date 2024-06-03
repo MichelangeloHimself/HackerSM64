@@ -9,7 +9,16 @@
 #define HUD_POWER_METER_Y            200
 #define HUD_POWER_METER_HIDDEN_Y     300
 
-#define HUD_TOP_Y 209
+// Static Power Meter postion values
+#define HUD_POWER_METER_STATIC_X            32
+#define HUD_POWER_METER_STATIC_Y            208
+
+// Watermark position values
+#define HUD_WATERMARK_X     6
+#define HUD_WATERMARK_Y     226
+
+
+#define HUD_TOP_Y 222
 #define HUD_BOTTOM_Y 19 // Same height as the Lakitu icon
 
 #define HUD_COINS_X 168
