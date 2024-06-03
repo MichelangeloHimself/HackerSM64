@@ -7,7 +7,7 @@
 /**
  * Enables most debug options, including PUPPYPRINT_DEBUG.
  */
-// #define DEBUG_ALL
+#define DEBUG_ALL
 
 /**
  * Disables all debug options (except PUPPYPRINT).
@@ -30,7 +30,7 @@
  * This allows you to quickly test the level you're working on.
  * If you want the game to boot normally, just comment out the define again.
  */
-// #define TEST_LEVEL LEVEL_BOB
+#define TEST_LEVEL LEVEL_BOB
 
 /**
  * Enables debug level select. Hold L while the game boots to turn it on.
@@ -67,7 +67,7 @@
 /**
  * Opens all courses and doors. Used for debugging purposes to unlock all content.
  */
-#define UNLOCK_ALL
+// #define UNLOCK_ALL
 
 /**
  * Same as above, but also reads all save file flags as complete.
