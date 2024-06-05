@@ -10,12 +10,12 @@
 #define HUD_POWER_METER_HIDDEN_Y     300
 
 // Static Power Meter postion values
-#define HUD_POWER_METER_STATIC_X            32
-#define HUD_POWER_METER_STATIC_Y            208
+#define HUD_POWER_METER_STATIC_X            25
+#define HUD_POWER_METER_STATIC_Y            210
 
 // Watermark position values
-#define HUD_WATERMARK_X     6
-#define HUD_WATERMARK_Y     226
+#define HUD_WATERMARK_X     5
+#define HUD_WATERMARK_Y     227
 
 
 #define HUD_TOP_Y 222

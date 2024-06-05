@@ -502,7 +502,8 @@ void render_hud_timer(void) {
 
 #ifdef HUD_WATERMARK
 void render_hud_watermark() {
-    print_small_text(HUD_WATERMARK_X, HUD_WATERMARK_Y, WATERMARK_STRING, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);
+    print_set_envcolour(255, 255, 255, 128);
+    print_small_text(HUD_WATERMARK_X, HUD_WATERMARK_Y, WATERMARK_STRING, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_NORMAL);
 }
 #endif
 /**

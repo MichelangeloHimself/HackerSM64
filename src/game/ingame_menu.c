@@ -26,6 +26,7 @@
 #include "config.h"
 #include "puppycam2.h"
 #include "main.h"
+#include "puppyprint.h"     // INCLUDE PUPPY PRINT
 
 #ifdef VERSION_EU
 #undef LANGUAGE_FUNCTION
@@ -40,9 +41,12 @@ s16 gCutsceneMsgXOffset;
 s16 gCutsceneMsgYOffset;
 s8 gRedCoinsCollected;
 #if defined(WIDE) && !defined(PUPPYCAM)
-u8 textCurrRatio43[] = { TEXT_HUD_CURRENT_RATIO_43 };
-u8 textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
-u8 textPressL[] = { TEXT_HUD_PRESS_L };
+// u8 textCurrRatio43[] = { TEXT_HUD_CURRENT_RATIO_43 };
+// u8 textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
+// u8 textPressL[] = { TEXT_HUD_PRESS_L };
+char *textCurrRatio43 = "ASPECT RATIO: 4:3";
+char *textCurrRatio169 = "ASPECT RATIO: 16:9";
+char *textPressL = "PRESS L TO SWITCH";
 #endif
 
 #if MULTILANG
@@ -1550,13 +1554,17 @@ void render_pause_red_coins(void) {
 #if defined(WIDE) && !defined(PUPPYCAM)
 void render_widescreen_setting(void) {
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
+    // gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     if (!gConfig.widescreen) {
-        print_generic_string(10, 20, textCurrRatio43);
-        print_generic_string(10,  7, textPressL);
+        // print_generic_string(10, 20, textCurrRatio43);
+        // print_generic_string(10,  7, textPressL);
+        print_small_text_light(7, 205, textCurrRatio43, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);    // PUPPYPRINT
+        print_small_text_light(7, 217, textPressL, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);    // PUPPYPRINT
     } else {
-        print_generic_string(10, 20, textCurrRatio169);
-        print_generic_string(10,  7, textPressL);
+        // print_generic_string(10, 20, textCurrRatio169);
+        // print_generic_string(10,  7, textPressL);
+        print_small_text_light(7, 205, textCurrRatio169, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);   // PUPPYPRINT
+        print_small_text_light(7, 217, textPressL, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);   // PUPPYPRINT
     }
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
     if (gPlayer1Controller->buttonPressed & L_TRIG){
@@ -1756,7 +1764,7 @@ void print_hud_pause_colorful_str(void) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
 
-    print_hud_lut_string(HUD_LUT_GLOBAL, 123, 81, textPause);
+    print_hud_lut_string(HUD_LUT_GLOBAL, 115, 40, textPause);
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 }
@@ -1897,6 +1905,7 @@ s32 render_pause_courses_and_castle(void) {
 
         case DIALOG_STATE_VERTICAL:
             shade_screen();
+            print_hud_pause_colorful_str(); // ADDED
             render_pause_my_score_coins();
             render_pause_red_coins();
 #ifndef DISABLE_EXIT_COURSE

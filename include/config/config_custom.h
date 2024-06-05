@@ -17,7 +17,7 @@
  */
 
 #define HUD_WATERMARK
-#define WATERMARK_STRING "SlidesTesting V0.025"
+#define WATERMARK_STRING "POGO'S SLIPPERY SLIDES V0.02"
 
 
 // Draws a custom logo on the hud.
