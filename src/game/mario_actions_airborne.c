@@ -14,8 +14,18 @@
 #include "mario_step.h"
 #include "save_file.h"
 #include "rumble_init.h"
-
+#include "include/config/config_custom.h"
 #include "config.h"
+
+/**
+ * NO_DIVE_SLIDE WILL MAKE MARIO ALWAYS BUTT SLIDE.
+ */
+#ifdef NO_DIVE_SLIDE
+    int ACT_SLIDE_ACTION = ACT_BUTT_SLIDE;
+#endif
+#ifndef NO_DIVE_SLIDE
+    int ACT_SLIDE_ACTION = ACT_DIVE_SLIDE;
+#endif
 
 void play_flip_sounds(struct MarioState *m, s16 frame1, s16 frame2, s16 frame3) {
     s32 animFrame = m->marioObj->header.gfx.animInfo.animFrame;
@@ -758,7 +768,7 @@ s32 act_dive(struct MarioState *m) {
                 drop_and_set_mario_action(m, ACT_HEAD_STUCK_IN_GROUND, 0);
             } else if (!check_fall_damage(m, ACT_HARD_FORWARD_GROUND_KB)) {
                 if (m->heldObj == NULL) {
-                    set_mario_action(m, ACT_DIVE_SLIDE, 0);
+                    set_mario_action(m, ACT_SLIDE_ACTION, 0);
                 } else {
                     set_mario_action(m, ACT_DIVE_PICKING_UP, 0);
                 }
@@ -1632,7 +1642,7 @@ s32 act_shot_from_cannon(struct MarioState *m) {
             break;
 
         case AIR_STEP_LANDED:
-            set_mario_action(m, ACT_DIVE_SLIDE, 0);
+            set_mario_action(m, ACT_SLIDE_ACTION, 0);
             m->faceAngle[0] = 0;
             set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
 #if ENABLE_RUMBLE
@@ -1727,7 +1737,7 @@ s32 act_flying(struct MarioState *m) {
             break;
 
         case AIR_STEP_LANDED:
-            set_mario_action(m, ACT_DIVE_SLIDE, 0);
+            set_mario_action(m, ACT_SLIDE_ACTION, 0);
 
             set_mario_animation(m, MARIO_ANIM_DIVE);
             set_anim_to_frame(m, 7);
@@ -1930,7 +1940,7 @@ s32 act_vertical_wind(struct MarioState *m) {
 
     switch (perform_air_step(m, 0)) {
         case AIR_STEP_LANDED:
-            set_mario_action(m, ACT_DIVE_SLIDE, 0);
+            set_mario_action(m, ACT_SLIDE_ACTION, 0);
             break;
 
         case AIR_STEP_HIT_WALL:

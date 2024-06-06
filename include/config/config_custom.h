@@ -3,6 +3,10 @@
 /*******************
  * CUSTOM SETTINGS *
  *******************/
+/**
+ * Mario will always slide on his butt.
+ */
+#define NO_DIVE_SLIDE
 
 /**
  * Disables Power Meter animations and displays
@@ -17,7 +21,7 @@
  */
 
 #define HUD_WATERMARK
-#define WATERMARK_STRING "POGO'S SLIPPERY SLIDES V0.024"
+#define WATERMARK_STRING "POGO'S SLIPPERY SLIDES V0.02"
 
 // Draws a custom logo on the hud.
 // #define HUD_CUSTOM_LOGO      // not yet implemented
