@@ -14,7 +14,7 @@
 #define HUD_POWER_METER_STATIC_Y            210
 
 // Watermark position values
-#define HUD_WATERMARK_X     5
+#define HUD_WATERMARK_X     2
 #define HUD_WATERMARK_Y     227
 
 

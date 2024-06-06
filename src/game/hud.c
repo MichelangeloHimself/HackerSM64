@@ -440,9 +440,10 @@ void render_debug_mode(void) {
  * Renders the amount of coins collected.
  */
 void render_hud_coins(void) {
+    s32 tempCoinCount = gHudDisplay.coins;
     print_text(HUD_COINS_X, HUD_TOP_Y, "$"); // 'Coin' glyph
     print_text((HUD_COINS_X + 16), HUD_TOP_Y, "*"); // 'X' glyph
-    print_text_fmt_int((HUD_COINS_X + 30), HUD_TOP_Y, "%d", gHudDisplay.coins);
+    print_text_fmt_int((HUD_COINS_X + 30), HUD_TOP_Y, "%d", (tempCoinCount * 10));
 }
 
 /**
@@ -613,7 +614,7 @@ void render_hud(void) {
         }
 
 #ifdef HUD_WATERMARK
-        if (hudDisplayFlags) {
+        if (hudDisplayFlags & HUD_DISPLAY_FLAG_UNKNOWN_0020) {
                     render_hud_watermark();
                 }
 #endif

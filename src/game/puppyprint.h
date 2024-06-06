@@ -117,6 +117,8 @@ enum PuppyFont {
     FONT_PLAIN,
     FONT_VANILLA,
     FONT_NORMAL,
+    FONT_NORMLINE,
+    FONT_SYMB,
     FONT_NUM
 };
 

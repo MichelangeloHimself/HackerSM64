@@ -27,6 +27,12 @@ ALIGNED8 static const Texture small_font_vanilla[] = {
 ALIGNED8 static const Texture small_font_normal[] = {
 #include "textures/segment2/custom_text5.ia4.inc.c"
 };
+ALIGNED8 static const Texture small_font_norm_outline[] = {
+#include "textures/segment2/custom_text6.ia4.inc.c"
+};
+ALIGNED8 static const Texture small_font_symb[] = {
+#include "textures/segment2/custom_text7.ia4.inc.c"
+};
 
 const u8 small_font_kerning_default[] = {
     /*!*/ 4, /*"*/ 5, /*#*/ 0, /*$*/ 0, /*%*/ 8, /*&*/ 8, /*'*/ 2, /*(*/ 5, /*)*/ 5, /***/ 0, /*+*/ 8, /*,*/ 3, /*-*/ 8, /*.*/ 3, /*/*/ 8, /*0*/ 6,
@@ -106,12 +112,12 @@ const u16 small_font_offsets_vanilla[] = {
 
 // Custom Font
 static const u8 small_font_kerning_normal[] = {
-    /*!*/ 3, /*"*/ 4, /*#*/ 0, /*$*/ 0, /*%*/ 6, /*&*/ 6, /*'*/ 2, /*(*/ 4, /*)*/ 4, /***/ 0, /*+*/ 6, /*,*/ 2, /*-*/ 6, /*.*/ 2, /*/*/ 6, /*0*/ 6,
+    /*!*/ 3, /*"*/ 4, /*#*/ 0, /*$*/ 0, /*%*/ 6, /*&*/ 6, /*'*/ 2, /*(*/ 4, /*)*/ 4, /***/ 0, /*+*/ 6, /*,*/ 2, /*-*/ 6, /*.*/ 2, /*/*/ 4, /*0*/ 6,
     /*1*/ 6, /*2*/ 6, /*3*/ 6, /*4*/ 6, /*5*/ 6, /*6*/ 6, /*7*/ 6, /*8*/ 6, /*9*/ 6, /*:*/ 2, /*;*/ 2, /*<*/ 0, /*=*/ 0, /*>*/ 0, /*?*/ 6, /*@*/ 0, 
-    /*A*/ 6, /*B*/ 6, /*C*/ 6, /*D*/ 6, /*E*/ 6, /*F*/ 6, /*G*/ 6, /*H*/ 6, /*I*/ 5, /*J*/ 7, /*K*/ 6, /*L*/ 6, /*M*/ 6, /*N*/ 6, /*O*/ 6, /*P*/ 6, 
+    /*A*/ 6, /*B*/ 6, /*C*/ 6, /*D*/ 6, /*E*/ 6, /*F*/ 6, /*G*/ 6, /*H*/ 6, /*I*/ 3, /*J*/ 7, /*K*/ 6, /*L*/ 6, /*M*/ 6, /*N*/ 6, /*O*/ 6, /*P*/ 6, 
     /*Q*/ 6, /*R*/ 6, /*S*/ 6, /*T*/ 6, /*U*/ 6, /*V*/ 6, /*W*/ 6, /*X*/ 6, /*Y*/ 6, /*Z*/ 6, /*[*/ 0, /*\\*/ 0, /*]*/ 0, /*^*/ 7, /*_*/ 0, /*`*/ 0,  
-    /*a*/ 5, /*b*/ 5, /*c*/ 5, /*d*/ 5, /*e*/ 5, /*f*/ 5, /*g*/ 5, /*h*/ 5, /*i*/ 2, /*j*/ 6, /*k*/ 4, /*l*/ 2, /*m*/ 5, /*n*/ 5, /*o*/ 5, /*p*/ 5, 
-    /*q*/ 5, /*r*/ 5, /*s*/ 5, /*t*/ 5, /*u*/ 5, /*v*/ 5, /*w*/ 5, /*x*/ 5, /*y*/ 5, /*z*/ 5, /*{*/ 0, /*|*/ 0, /*}*/ 0, /*~*/ 6,   
+    /*A*/ 6, /*B*/ 6, /*C*/ 6, /*D*/ 6, /*E*/ 6, /*F*/ 6, /*G*/ 6, /*H*/ 6, /*I*/ 5, /*J*/ 7, /*K*/ 6, /*L*/ 6, /*M*/ 6, /*N*/ 6, /*O*/ 6, /*P*/ 6, 
+    /*Q*/ 6, /*R*/ 6, /*S*/ 6, /*T*/ 6, /*U*/ 6, /*V*/ 6, /*W*/ 6, /*X*/ 6, /*Y*/ 6, /*Z*/ 6, /*{*/ 0, /*|*/ 0, /*}*/ 0, /*~*/ 6  
 };
 
 const u16 small_font_offsets_normal[] = {
@@ -124,6 +130,43 @@ const u16 small_font_offsets_normal[] = {
     /*v*/ 608, /*w*/ 616, /*x*/ 624, /*y*/ 632, /*z*/ 640, /*{*/ 648, /*|*/ 648, /*}*/ 648, /*~*/ 648, /*:)*/ 656
 };
 
+static const u8 small_font_kerning_norm_outline[] = {
+    /*!*/ 3, /*"*/ 4, /*#*/ 0, /*$*/ 6, /*%*/ 6, /*&*/ 6, /*'*/ 2, /*(*/ 4, /*)*/ 4, /***/ 0, /*+*/ 6, /*,*/ 2, /*-*/ 6, /*.*/ 2, /*/*/ 4, /*0*/ 6,
+    /*1*/ 6, /*2*/ 6, /*3*/ 6, /*4*/ 6, /*5*/ 6, /*6*/ 6, /*7*/ 6, /*8*/ 6, /*9*/ 6, /*:*/ 2, /*;*/ 2, /*<*/ 0, /*=*/ 0, /*>*/ 0, /*?*/ 5, /*@*/ 0, 
+    /*A*/ 6, /*B*/ 6, /*C*/ 6, /*D*/ 6, /*E*/ 6, /*F*/ 6, /*G*/ 6, /*H*/ 6, /*I*/ 3, /*J*/ 6, /*K*/ 6, /*L*/ 6, /*M*/ 6, /*N*/ 6, /*O*/ 6, /*P*/ 6, 
+    /*Q*/ 6, /*R*/ 6, /*S*/ 6, /*T*/ 6, /*U*/ 6, /*V*/ 6, /*W*/ 6, /*X*/ 6, /*Y*/ 6, /*Z*/ 6, /*[*/ 0, /*\\*/ 0, /*]*/ 0, /*^*/ 7, /*_*/ 0, /*`*/ 0,  
+    /*A*/ 6, /*B*/ 6, /*C*/ 6, /*D*/ 6, /*E*/ 6, /*F*/ 6, /*G*/ 6, /*H*/ 6, /*I*/ 3, /*J*/ 6, /*K*/ 6, /*L*/ 6, /*M*/ 6, /*N*/ 6, /*O*/ 6, /*P*/ 6, 
+    /*Q*/ 6, /*R*/ 6, /*S*/ 6, /*T*/ 6, /*U*/ 6, /*V*/ 6, /*W*/ 6, /*X*/ 6, /*Y*/ 6, /*Z*/ 6, /*{*/ 0, /*|*/ 0, /*}*/ 0, /*~*/ 7
+};
+
+const u16 small_font_offsets_norm_outline[] = {
+    /*!*/ 0, /*"*/ 8, /*#*/ 16, /*$*/ 24, /*%*/ 32, /*&*/ 40, /*'*/ 48, /*(*/ 56, /*)*/ 64, /***/ 72, /*+*/ 80, /*,*/ 88, /*-*/ 96, /*.*/ 104, /*/*/ 112,
+    /*0*/ 120, /*1*/ 128, /*2*/ 136, /*3*/ 144, /*4*/ 152, /*5*/ 160, /*6*/ 168, /*7*/ 176, /*8*/ 184, /*9*/ 192, /*:*/ 200, /*;*/ 208, /*<*/ 216, /*=*/ 216,
+    /*>*/ 216, /*?*/ 216, /*@*/ 224, /*A*/ 224, /*B*/ 232, /*C*/ 240, /*D*/ 248, /*E*/ 256, /*F*/ 264, /*G*/ 272, /*H*/ 280, /*I*/ 288, /*J*/ 296, /*K*/ 304,
+    /*L*/ 312, /*M*/ 320, /*N*/ 328, /*O*/ 336, /*P*/ 344, /*Q*/ 352, /*R*/ 360, /*S*/ 368, /*T*/ 376, /*U*/ 384, /*V*/ 392, /*W*/ 400, /*X*/ 408, /*Y*/ 416,
+    /*Z*/ 424, /*[*/ 432, /*\*/ 432, /*]*/ 432, /*^*/ 432, /*_*/ 440, /*`*/ 440, /*a*/ 440, /*b*/ 448, /*c*/ 456, /*d*/ 464, /*e*/ 472, /*f*/ 480, /*g*/ 488, 
+    /*h*/ 496, /*i*/ 504, /*j*/ 512, /*k*/ 520, /*l*/ 528, /*m*/ 536, /*n*/ 544, /*o*/ 552, /*p*/ 560, /*q*/ 568, /*r*/ 576, /*s*/ 584, /*t*/ 592, /*u*/ 600, 
+    /*v*/ 608, /*w*/ 616, /*x*/ 624, /*y*/ 632, /*z*/ 640, /*{*/ 648, /*|*/ 648, /*}*/ 648, /*~*/ 648, /*:)*/ 656
+};
+
+static const u8 small_font_kerning_symb[] = {
+    /*!*/ 0, /*"*/ 0, /*#*/ 0, /*$*/ 0, /*%*/ 0, /*&*/ 6, /*'*/ 0, /*(*/ 6, /*)*/ 6, /***/ 0, /*+*/ 8, /*,*/ 0, /*-*/ 0, /*.*/ 0, /*/*/ 0, /*0*/ 0,
+    /*1*/ 0, /*2*/ 0, /*3*/ 0, /*4*/ 0, /*5*/ 0, /*6*/ 0, /*7*/ 0, /*8*/ 0, /*9*/ 0, /*:*/ 0, /*;*/ 0, /*<*/ 0, /*=*/ 0, /*>*/ 0, /*?*/ 0, /*@*/ 0, 
+    /*A*/ 0, /*B*/ 0, /*C*/ 0, /*D*/ 0, /*E*/ 0, /*F*/ 0, /*G*/ 0, /*H*/ 0, /*I*/ 0, /*J*/ 0, /*K*/ 0, /*L*/ 0, /*M*/ 0, /*N*/ 0, /*O*/ 0, /*P*/ 0, 
+    /*Q*/ 0, /*R*/ 0, /*S*/ 0, /*T*/ 0, /*U*/ 0, /*V*/ 0, /*W*/ 0, /*X*/ 0, /*Y*/ 0, /*Z*/ 0, /*[*/ 0, /*\\*/ 0, /*]*/ 0, /*^*/ 0, /*_*/ 0, /*`*/ 0,  
+    /*A*/ 0, /*B*/ 0, /*C*/ 0, /*D*/ 0, /*E*/ 0, /*F*/ 0, /*G*/ 0, /*H*/ 0, /*I*/ 0, /*J*/ 0, /*K*/ 0, /*L*/ 0, /*M*/ 0, /*N*/ 0, /*O*/ 0, /*P*/ 0, 
+    /*Q*/ 0, /*R*/ 0, /*S*/ 0, /*T*/ 0, /*U*/ 0, /*V*/ 0, /*W*/ 0, /*X*/ 0, /*Y*/ 0, /*Z*/ 0, /*{*/ 0, /*|*/ 0, /*}*/ 0, /*~*/ 0
+};
+
+const u16 small_font_offsets_symb[] = {
+    /*!*/ 0, /*"*/ 8, /*#*/ 16, /*$*/ 24, /*%*/ 32, /*&*/ 40, /*'*/ 48, /*(*/ 56, /*)*/ 64, /***/ 72, /*+*/ 80, /*,*/ 88, /*-*/ 96, /*.*/ 104, /*/*/ 112,
+    /*0*/ 120, /*1*/ 128, /*2*/ 136, /*3*/ 144, /*4*/ 152, /*5*/ 160, /*6*/ 168, /*7*/ 176, /*8*/ 184, /*9*/ 192, /*:*/ 200, /*;*/ 208, /*<*/ 216, /*=*/ 216,
+    /*>*/ 216, /*?*/ 216, /*@*/ 224, /*A*/ 224, /*B*/ 232, /*C*/ 240, /*D*/ 248, /*E*/ 256, /*F*/ 264, /*G*/ 272, /*H*/ 280, /*I*/ 288, /*J*/ 296, /*K*/ 304,
+    /*L*/ 312, /*M*/ 320, /*N*/ 328, /*O*/ 336, /*P*/ 344, /*Q*/ 352, /*R*/ 360, /*S*/ 368, /*T*/ 376, /*U*/ 384, /*V*/ 392, /*W*/ 400, /*X*/ 408, /*Y*/ 416,
+    /*Z*/ 424, /*[*/ 432, /*\*/ 432, /*]*/ 432, /*^*/ 432, /*_*/ 440, /*`*/ 440, /*a*/ 440, /*b*/ 448, /*c*/ 456, /*d*/ 464, /*e*/ 472, /*f*/ 480, /*g*/ 488, 
+    /*h*/ 496, /*i*/ 504, /*j*/ 512, /*k*/ 520, /*l*/ 528, /*m*/ 536, /*n*/ 544, /*o*/ 552, /*p*/ 560, /*q*/ 568, /*r*/ 576, /*s*/ 584, /*t*/ 592, /*u*/ 600, 
+    /*v*/ 608, /*w*/ 616, /*x*/ 624, /*y*/ 632, /*z*/ 640, /*{*/ 648, /*|*/ 648, /*}*/ 648, /*~*/ 648, /*:)*/ 656
+};
 const struct PPTextFont sPPFont_default = {
     small_font_default,
     small_font_kerning_default,
@@ -175,17 +218,37 @@ const struct PPTextFont sPPFont_normal = {
     8, 12
 };
 
+const struct PPTextFont sPPFont_norm_outline = {
+    small_font_norm_outline,
+    small_font_kerning_norm_outline,
+    small_font_offsets_norm_outline,
+    NULL,
+    G_IM_FMT_IA, G_IM_SIZ_4b,
+    672, 12,
+    8, 12
+};
+
+const struct PPTextFont sPPFont_symb = {
+    small_font_symb,
+    small_font_kerning_symb,
+    small_font_offsets_symb,
+    NULL,
+    G_IM_FMT_IA, G_IM_SIZ_4b,
+    672, 12,
+    8, 12
+};
+
 const struct PPTextFont *const gPuppyPrintFontTable[] = {
-    &sPPFont_default, &sPPFont_outline, &sPPFont_plain, &sPPFont_vanilla, &sPPFont_normal
+    &sPPFont_default, &sPPFont_outline, &sPPFont_plain, &sPPFont_vanilla, &sPPFont_normal, &sPPFont_norm_outline, &sPPFont_symb
 };
 
 
 const Texture *const puppyprint_font_lut[] = {
-    small_font_default, small_font_outline, small_font_plain, small_font_vanilla, small_font_normal
+    small_font_default, small_font_outline, small_font_plain, small_font_vanilla, small_font_normal, small_font_norm_outline, small_font_symb
 };
 
 const u8 *const puppyprint_kerning_lut[][95] = {
-    small_font_kerning_default, small_font_kerning_outline, small_font_kerning_plain, small_font_kerning_vanilla, small_font_kerning_normal
+    small_font_kerning_default, small_font_kerning_outline, small_font_kerning_plain, small_font_kerning_vanilla, small_font_kerning_normal, small_font_kerning_norm_outline, small_font_kerning_symb
 };
 
 #endif

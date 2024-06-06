@@ -44,8 +44,8 @@ s8 gRedCoinsCollected;
 // u8 textCurrRatio43[] = { TEXT_HUD_CURRENT_RATIO_43 };
 // u8 textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
 // u8 textPressL[] = { TEXT_HUD_PRESS_L };
-char *textCurrRatio43 = "ASPECT RATIO: 4:3";
-char *textCurrRatio169 = "ASPECT RATIO: 16:9";
+char *textCurrRatio43 = "4:3";
+char *textCurrRatio169 = "16:9";
 char *textPressL = "PRESS L TO SWITCH";
 #endif
 
@@ -584,40 +584,33 @@ void print_credits_string(s16 x, s16 y, const u8 *str) {
 void handle_menu_scrolling(s8 scrollDirection, s8 *currentIndex, s8 minIndex, s8 maxIndex) {
     u8 index = 0;
 
-    if (scrollDirection == MENU_SCROLL_VERTICAL) {
-        if (gPlayer1Controller->rawStickY >  60) index++;
-        if (gPlayer1Controller->rawStickY < -60) index += 2;
-    } else if (scrollDirection == MENU_SCROLL_HORIZONTAL) {
-        if (gPlayer1Controller->rawStickX >  60) index += 2;
-        if (gPlayer1Controller->rawStickX < -60) index++;
+    if (scrollDirection == MENU_SCROLL_VERTICAL) { // Up & Down Movement
+        if (gPlayer1Controller->buttonPressed & U_CBUTTONS) index++; // Scroll Up
+        if (gPlayer1Controller->buttonPressed & D_CBUTTONS) index += 2; // Scroll Down
+    } else if (scrollDirection == MENU_SCROLL_HORIZONTAL) { // Left & Right Movement
+        if (gPlayer1Controller->buttonPressed & R_CBUTTONS) index += 2; // Scroll Right
+        if (gPlayer1Controller->buttonPressed & L_CBUTTONS) index++; // Scroll Left
     }
 
     if (((index ^ gMenuHoldKeyIndex) & index) == 2) {
-        if (*currentIndex != maxIndex) {
-            play_sound(SOUND_MENU_CHANGE_SELECT, gGlobalSoundSource);
-            (*currentIndex)++;
+        (*currentIndex)++;
+        if (*currentIndex > maxIndex) {
+            *currentIndex = minIndex;
         }
+        play_sound(SOUND_MENU_CHANGE_SELECT, gGlobalSoundSource);
     }
 
     if (((index ^ gMenuHoldKeyIndex) & index) == 1) {
-        if (*currentIndex != minIndex) {
-            play_sound(SOUND_MENU_CHANGE_SELECT, gGlobalSoundSource);
-            (*currentIndex)--;
+        (*currentIndex)--;
+        if (*currentIndex < minIndex) {
+            *currentIndex = maxIndex;
         }
+        play_sound(SOUND_MENU_CHANGE_SELECT, gGlobalSoundSource);
     }
 
-    if (gMenuHoldKeyTimer == 10) {
-        gMenuHoldKeyTimer = 8;
-        gMenuHoldKeyIndex = 0;
-    } else {
-        gMenuHoldKeyTimer++;
-        gMenuHoldKeyIndex = index;
-    }
-
-    if ((index & 3) == 0) {
-        gMenuHoldKeyTimer = 0;
-    }
+    gMenuHoldKeyIndex = index;
 }
+
 
 s32 get_str_x_pos_from_center(s16 centerPos, u8 *str, UNUSED f32 scale) {
     s16 strPos = 0;
@@ -1558,13 +1551,14 @@ void render_widescreen_setting(void) {
     if (!gConfig.widescreen) {
         // print_generic_string(10, 20, textCurrRatio43);
         // print_generic_string(10,  7, textPressL);
-        print_small_text_light(7, 205, textCurrRatio43, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);    // PUPPYPRINT
-        print_small_text_light(7, 217, textPressL, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);    // PUPPYPRINT
+        print_set_envcolour(255,255,255,128);
+        print_small_text_light(3, 218, textCurrRatio43, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);    // PUPPYPRINT
+        // print_small_text_light(7, 217, textPressL, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);    // PUPPYPRINT
     } else {
         // print_generic_string(10, 20, textCurrRatio169);
         // print_generic_string(10,  7, textPressL);
-        print_small_text_light(7, 205, textCurrRatio169, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);   // PUPPYPRINT
-        print_small_text_light(7, 217, textPressL, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);   // PUPPYPRINT
+        print_small_text_light(3, 218, textCurrRatio169, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);   // PUPPYPRINT
+        // print_small_text_light(7, 217, textPressL, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_OUTLINE);   // PUPPYPRINT
     }
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
     if (gPlayer1Controller->buttonPressed & L_TRIG){
@@ -1599,92 +1593,42 @@ void render_widescreen_setting(void) {
 #endif
 
 void render_pause_my_score_coins(void) {
-    u8 textCourse[] = { TEXT_COURSE };
-    u8 textMyScore[] = { TEXT_MY_SCORE };
-    u8 textStar[] = { TEXT_STAR };
-    u8 textUnfilledStar[] = { TEXT_UNFILLED_STAR };
-
-    u8 strCourseNum[4];
-
-    void **courseNameTbl = segmented_to_virtual(languageTable[gInGameLanguage][1]);
-    void    **actNameTbl = segmented_to_virtual(languageTable[gInGameLanguage][2]);
 
     u8 courseIndex = COURSE_NUM_TO_INDEX(gCurrCourseNum);
-    u8 starFlags = save_file_get_star_flags(gCurrSaveFileNum - 1, COURSE_NUM_TO_INDEX(gCurrCourseNum));
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
 
     if (courseIndex <= COURSE_NUM_TO_INDEX(COURSE_STAGES_MAX)) {
-        print_hud_my_score_coins(1, gCurrSaveFileNum - 1, courseIndex, 178, 103);
-        print_hud_my_score_stars(gCurrSaveFileNum - 1, courseIndex, 118, 103);
+        print_hud_my_score_coins(1, gCurrSaveFileNum - 1, courseIndex, 170, 103);
+        print_hud_my_score_stars(gCurrSaveFileNum - 1, courseIndex, 94, 103);
     }
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
-    gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
-
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
-
-    if (courseIndex <= COURSE_NUM_TO_INDEX(COURSE_STAGES_MAX)
-        && (save_file_get_course_star_count(gCurrSaveFileNum - 1, courseIndex) != 0)) {
-        print_generic_string(MYSCORE_X, 121, LANGUAGE_ARRAY(textMyScore));
-    }
-
-    u8 *courseName = segmented_to_virtual(courseNameTbl[courseIndex]);
-
-    if (courseIndex <= COURSE_NUM_TO_INDEX(COURSE_STAGES_MAX)) {
-        print_generic_string(TXT_COURSE_X, 157, LANGUAGE_ARRAY(textCourse));
-        int_to_str(gCurrCourseNum, strCourseNum);
-        print_generic_string(CRS_NUM_X1, 157, strCourseNum);
-
-        u8 *actName = segmented_to_virtual(actNameTbl[COURSE_NUM_TO_INDEX(gCurrCourseNum) * 6 + gDialogCourseActNum - 1]);
-
-        if (starFlags & (1 << (gDialogCourseActNum - 1))) {
-            print_generic_string(TXT_STAR_X, 140, textStar);
-        } else {
-            print_generic_string(TXT_STAR_X, 140, textUnfilledStar);
-        }
-
-        print_generic_string(ACT_NAME_X, 140, actName);
-        print_generic_string(LVL_NAME_X, 157, &courseName[3]);
-    } else {
-        print_generic_string(SECRET_LVL_NAME_X, 157, &courseName[3]);
-    }
-
-    gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 }
 
 #define TXT1_X 3
 #define TXT2_X 119
 #define Y_VAL7 2
 
-void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
-    u8 textLakituMario[] = { TEXT_LAKITU_MARIO };
-    u8 textLakituStop[] = { TEXT_LAKITU_STOP };
-    u8 textNormalUpClose[] = { TEXT_NORMAL_UPCLOSE };
-    u8 textNormalFixed[] = { TEXT_NORMAL_FIXED };
+void render_pause_camera_options(s8 *index) {
 
-    handle_menu_scrolling(MENU_SCROLL_HORIZONTAL, index, 1, 2);
+    handle_menu_scrolling(MENU_SCROLL_VERTICAL, index, 1, 2);
 
-    gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
-
-    print_generic_string(x +     14, y +  2, textLakituMario);
-    print_generic_string(x + TXT1_X, y - 13, LANGUAGE_ARRAY(textNormalUpClose));
-    print_generic_string(x +    124, y +  2, textLakituStop);
-    print_generic_string(x + TXT2_X, y - 13, LANGUAGE_ARRAY(textNormalFixed));
-
-    gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
-    create_dl_translation_matrix(MENU_MTX_PUSH, ((*index - 1) * xIndex) + x, y + Y_VAL7, 0);
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
-    gSPDisplayList(gDisplayListHead++, dl_draw_triangle);
-    gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+    // print_small_text((CAM_OPTION_X), 170, "<COL_FFA500FF>LAKITU/MARIO", PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_NORMLINE);
+    // print_small_text((CAM_OPTION_X), 180, "<COL_FFA500FF>LAKITU/STOP", PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_NORMLINE);
 
     switch (*index) {
         case CAM_SELECTION_MARIO:
+            print_small_text((CAM_OPTION_X - 7), 170, SELECT_ICON,PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_SYMB);
+            print_small_text((CAM_OPTION_X), 170, "<COL_FFA500FF>LAKITU/MARIO", PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_NORMLINE);
+            print_small_text((CAM_OPTION_X), 180, "<COL_808080FF>LAKITU/STOP", PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_NORMLINE);
             cam_select_alt_mode(CAM_SELECTION_MARIO);
             break;
         case CAM_SELECTION_FIXED:
+            print_small_text((CAM_OPTION_X - 7), 180, SELECT_ICON,PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_SYMB);
+            print_small_text((CAM_OPTION_X), 170, "<COL_808080FF>LAKITU/MARIO", PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_NORMLINE);
+            print_small_text((CAM_OPTION_X), 180, "<COL_FFA500FF>LAKITU/STOP", PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_NORMLINE);
             cam_select_alt_mode(CAM_SELECTION_FIXED);
             break;
     }
@@ -1693,33 +1637,81 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
 #define X_VAL8 4
 #define Y_VAL8 2
 
-void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
-    u8 textContinue[] = { TEXT_CONTINUE };
-    u8 textExitCourse[] = { TEXT_EXIT_COURSE };
-    u8 textCameraAngleR[] = { TEXT_CAMERA_ANGLE_R };
+void render_pause_course_options(s8 *index) {
 
-    handle_menu_scrolling(MENU_SCROLL_VERTICAL, index, 1, 3);
+    handle_menu_scrolling(MENU_SCROLL_HORIZONTAL, index, 1, 3);
 
-    gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
-
-    print_generic_string(x + 10, y - 2, LANGUAGE_ARRAY(textContinue));
-    print_generic_string(x + 10, y - 17, LANGUAGE_ARRAY(textExitCourse));
-
-    if (*index != MENU_OPT_CAMERA_ANGLE_R) {
-        print_generic_string(x + 10, y - 33, LANGUAGE_ARRAY(textCameraAngleR));
-        gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
-
-        create_dl_translation_matrix(MENU_MTX_PUSH, x - X_VAL8, (y - ((*index - 1) * yIndex)) - Y_VAL8, 0);
-
-        gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
-        gSPDisplayList(gDisplayListHead++, dl_draw_triangle);
-        gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+    // CUSTOM MENU TEXT PRINTING
+    if (*index == MENU_OPT_CONTINUE) {
+        print_small_text(SCREEN_CENTER_X, 160, PAUSE_OPTION_TXT1, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_NORMLINE);
+        print_small_text(ICON_POS_X1, OPTIONS_POS_Y, SELECT_ICON, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_SYMB); // TO MOVE
     }
-
-    if (*index == MENU_OPT_CAMERA_ANGLE_R) {
-        render_pause_camera_options(x - 42, y - 42, &gDialogCameraAngleIndex, 110);
+    if (*index == MENU_OPT_EXIT_COURSE) {
+        print_small_text(SCREEN_CENTER_X, 160, PAUSE_OPTION_TXT2, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_NORMLINE);
+        print_small_text(ICON_POS_X2, OPTIONS_POS_Y, SELECT_ICON, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_SYMB); // TO MOVE
     }
+    else if (*index == MENU_OPT_CAMERA_ANGLE_R) {
+        print_small_text(SCREEN_CENTER_X, 160, PAUSE_OPTION_TXT3, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_NORMLINE);
+        print_small_text((ICON_POS_X3 - 3), (OPTIONS_POS_Y + 2), DOWN_ARROW, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL, FONT_SYMB); // TO MOVE
+        render_pause_camera_options(&gDialogCameraAngleIndex);
+    }
+}
+
+s32 statBox_x1 = SCREEN_CENTER_X - STATSBOX_WIDTH;
+s32 statBox_x2 = SCREEN_CENTER_X + STATSBOX_WIDTH;
+s32 statBox_y1 = STATSBOX_Y1;
+s32 statBox_y2 = STATSBOX_Y1 + STATSBOX_HEIGHT;
+s16 slide_y = STATSBOX_Y1 + 1;
+s16 slideName_y = 32;
+
+/*
+* Renders blank white box as background for displaying player data
+*/
+void render_text_background(void)
+{
+    prepare_blank_box();
+
+    render_blank_box_rounded(statBox_x1, statBox_y1, statBox_x2, statBox_y2, 255, 255, 255, 128);
+
+    finish_blank_box();
+}
+
+/*
+* Renders renders the headings/titles for each stat
+*/
+void render_text_titles(void)
+{
+        // CURRENT SLIDE
+    print_small_text(SCREEN_CENTER_X, slide_y, SLIDE_HEADER_TXT, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_NORMLINE);
+}
+
+/*
+* Renders renders the headings/titles for each stat
+*/
+void render_game_paused(void)
+{
+    print_small_text(SCREEN_CENTER_X, 4, GAMEPAUSED_TXT, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_NORMLINE);
+}
+
+/*
+* Renders current course name in pause menu
+*/
+void render_curr_course_name(void) {
+
+    char currCourseName[64];    // 48 character limit
+    switch (gCurrCourseNum) {
+        case 1:
+            sprintf(currCourseName, "%s%s", ppColorBlue, COURSENAMEONE);
+            break;
+        // ... Add more cases for other courses ...
+        
+        default:
+            sprintf(currCourseName, "%s%s", ppColorRed, COURSENONE);
+            break;
+}
+print_small_text(SCREEN_CENTER_X, slideName_y, currCourseName, PRINT_TEXT_ALIGN_CENTER, PRINT_ALL, FONT_NORMLINE);
+
+
 }
 
 void render_pause_castle_menu_box(s16 x, s16 y) {
@@ -1762,9 +1754,9 @@ void print_hud_pause_colorful_str(void) {
     u8 textPause[] = { TEXT_PAUSE };
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 128);
 
-    print_hud_lut_string(HUD_LUT_GLOBAL, 115, 40, textPause);
+    print_hud_lut_string(HUD_LUT_GLOBAL, 124, 4, textPause);
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 }
@@ -1881,6 +1873,8 @@ s8 gHudFlash = HUD_FLASH_NONE;
 
 s32 render_pause_courses_and_castle(void) {
     s16 index;
+// Disable HUD
+gHudDisplay.flags = HUD_DISPLAY_PAUSED;
 
 #ifdef PUPPYCAM
     puppycam_check_pause_buttons();
@@ -1904,10 +1898,13 @@ s32 render_pause_courses_and_castle(void) {
             break;
 
         case DIALOG_STATE_VERTICAL:
-            shade_screen();
-            print_hud_pause_colorful_str(); // ADDED
-            render_pause_my_score_coins();
+            // shade_screen();
+            render_text_background();
+            render_game_paused();
+            render_text_titles();
+            // render_pause_my_score_coins();
             render_pause_red_coins();
+            render_curr_course_name();
 #ifndef DISABLE_EXIT_COURSE
 #ifdef EXIT_COURSE_WHILE_MOVING
             if ((gMarioStates[0].action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER | ACT_FLAG_PAUSE_EXIT))
@@ -1915,11 +1912,12 @@ s32 render_pause_courses_and_castle(void) {
 #else
             if (gMarioStates[0].action & ACT_FLAG_PAUSE_EXIT) {
 #endif
-                render_pause_course_options(99, 93, &gDialogLineNum, 15);
+                render_pause_course_options(&gDialogLineNum);
             }
 #endif
 
             if (gPlayer1Controller->buttonPressed & (A_BUTTON | START_BUTTON)) {
+                gHudDisplay.flags = HUD_DISPLAY_DEFAULT;
                 level_set_transition(0, NULL);
                 play_sound(SOUND_MENU_PAUSE_CLOSE, gGlobalSoundSource);
                 gDialogBoxState = DIALOG_STATE_OPENING;
@@ -1936,12 +1934,16 @@ s32 render_pause_courses_and_castle(void) {
             break;
 
         case DIALOG_STATE_HORIZONTAL:
-            shade_screen();
-            print_hud_pause_colorful_str();
+            // shade_screen();
+            render_text_background();
+            render_text_titles();
+            // print_hud_pause_colorful_str();
+            render_game_paused();
             render_pause_castle_menu_box(160, 143);
             render_pause_castle_main_strings(104, 60);
-
+            render_curr_course_name();
             if (gPlayer1Controller->buttonPressed & (A_BUTTON | START_BUTTON)) {
+                gHudDisplay.flags = HUD_DISPLAY_DEFAULT;
                 level_set_transition(0, NULL);
                 play_sound(SOUND_MENU_PAUSE_CLOSE, gGlobalSoundSource);
                 gMenuMode = MENU_MODE_NONE;
@@ -2176,7 +2178,7 @@ s32 render_course_complete_screen(void) {
             break;
 
         case DIALOG_STATE_VERTICAL:
-            shade_screen();
+            // shade_screen();
             render_course_complete_lvl_info_and_hud_str();
             render_save_confirmation(100, 86, &gDialogLineNum, 20);
 
