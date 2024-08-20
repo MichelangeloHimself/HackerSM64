@@ -12,7 +12,7 @@
 /**
  * Allows Mario to easily side flip when moving forwards at any speed.
  */
-// #define SIDE_FLIP_AT_LOW_SPEEDS
+#define SIDE_FLIP_AT_LOW_SPEEDS
 
 /**
  * Allows Mario to aim towards a new direction at the end of turning around,
@@ -36,7 +36,7 @@
 /**
  * Prevents Mario from falling asleep while idle.
  */
-// #define NO_SLEEP
+#define NO_SLEEP
 
 /**
  * Disables fall damage.
